@@ -9,10 +9,10 @@ if [ ! -f "experiments/latest/model.keras" ]; then
     echo "⚠️  Model not found. Training a new model..."
     
     # Create sample data
-    python scripts/make_sample_data.py
+    /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 scripts/make_sample_data.py
     
     # Train model (quick training for deployment)
-    python -m src.cli.train --model lstm --epochs 20
+    /Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m src.cli.train --model lstm --epochs 20
     
     echo "✅ Model trained successfully!"
 else
@@ -21,4 +21,4 @@ fi
 
 # Start the bot
 echo "🤖 Starting Telegram bot..."
-python -m src.integrations.telegram_bot
+/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 -m src.integrations.telegram_bot

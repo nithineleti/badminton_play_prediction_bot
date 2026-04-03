@@ -1,268 +1,271 @@
-# Badminton Wind Predictor
+# 🏸 Badminton Wind Predictor - predict_air_bot
 
-A complete, end-to-end machine learning system for predicting short-term wind conditions (1h/3h/6h) and deciding whether it's safe to play badminton outdoors. Uses synthetic data generation, LSTM forecasting, and a decision engine with configurable thresholds.
+A complete, end-to-end machine learning system for predicting short-term wind conditions (1h/3h/6h) and deciding whether it's safe to play badminton outdoors. Features a **Telegram bot with interactive UI**, synthetic data generation, LSTM forecasting, and a decision engine with configurable thresholds.
 
-## Features
+## ✨ Features
 
-- ⚡ **Fast setup**: Works locally and in Google Colab
-- 🆓 **Zero-cost**: Uses synthetic data, runs on free tiers
-- 🧪 **Well-tested**: Unit tests and CI with GitHub Actions
-- 🚀 **Deployment-ready**: Gradio UI for Hugging Face Spaces
+- ⚡ **One-Command Setup**: `./run_project.sh` handles everything automatically
+- 🤖 **Interactive Telegram Bot**: Buttons for refresh, main menu, location change, full forecast
+- 🔄 **Consistent Predictions**: Weather data caching prevents alternating results
+- 🆓 **Zero-Cost**: Uses synthetic data, runs on free tiers
+- 🚀 **Deployment-Ready**: Railway, Render, Fly.io, and Hugging Face Spaces support
 - 📊 **Reproducible**: Deterministic RNG and pinned dependencies
-- 🤖 **Bot integrations**: Telegram & WhatsApp bots for easy access
+- � **Well-Tested**: Unit tests and CI with GitHub Actions
+- 📱 **Mobile-Friendly**: Telegram bot works perfectly on phones
 
-## Quick Start (Local)
+## 🎯 Quick Start (Local)
 
-### 1. Setup Environment
+### Option 1: One-Command Setup (Recommended)
 
-#### Option A: Conda (Recommended)
-
-```powershell
-# Create conda environment from YAML file
-conda env create -f environment.yml
-
-# Activate environment
-conda activate badminton-wind
+```bash
+# Clone and run - that's it!
+git clone <repository-url>
+cd badminton_play_prediction_bot
+chmod +x run_project.sh
+./run_project.sh
 ```
 
-Or use the automated setup script:
-```powershell
-.\setup_conda.ps1
-```
+The script automatically:
+- ✅ Creates virtual environment
+- ✅ Installs all dependencies
+- ✅ Generates sample weather data
+- ✅ Trains ML model (if needed)
+- ✅ Sets up bot configuration
+- ✅ Starts the Telegram bot
 
-#### Option B: pip + venv
+### Option 2: Manual Setup
 
-```powershell
-# Create virtual environment
+```bash
+# 1. Setup environment
 python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
 
-# Activate (Windows PowerShell)
-.\venv\Scripts\Activate.ps1
-
-# Install dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
-```
 
-### 2. Generate Sample Data
-
-```bash
+# 3. Generate sample data
 python scripts/make_sample_data.py
-```
 
-### 3. Train Models
+# 4. Train model (optional - bot works without it)
+python -m src.cli.train --model lstm --epochs 20
 
-```bash
-# Train baseline (persistence model)
-python -m src.cli.train --model baseline --epochs 0
+# 5. Setup bot token
+./setup_bot.sh
 
-# Train LSTM (quick training for demo)
-python -m src.cli.train --model lstm --epochs 5
-```
-
-### 4. Run Inference
-
-```bash
-python -m src.cli.infer --model experiments/latest/model.h5
-```
-
-This outputs JSON with forecasts for 1h/3h/6h horizons and a PLAY/DON'T PLAY decision.
-
-### 5. Run Tests
-
-```bash
-pytest
-```
-
-### 6. Launch Gradio UI (Local)
-
-```bash
-cd deployment/hf_space
-python app.py
-```
-
-Open your browser to the URL shown (typically http://127.0.0.1:7860).
-
-## Quick Start (Google Colab)
-
-Open `notebooks/00_quickstart_colab.ipynb` in Colab and run all cells. It will:
-1. Generate sample data
-2. Preprocess features
-3. Train a tiny LSTM for 1 epoch
-4. Show forecast and decision
-
-## Project Structure
-
-```
-badminton-wind-predictor/
-├── data/
-│   ├── raw/                    # Gitignored, for real data
-│   └── sample_station.csv      # Synthetic hourly data (2000 rows)
-├── src/
-│   ├── config.py               # Central configuration
-│   ├── data/
-│   │   ├── fetch.py            # Data loading
-│   │   └── preprocess.py       # Feature engineering
-│   ├── models/
-│   │   ├── baseline.py         # Persistence model
-│   │   ├── lstm_model.py       # LSTM forecaster
-│   │   └── quantiles.py        # Uncertainty quantification
-│   ├── eval/
-│   │   ├── metrics.py          # MAE, RMSE, quantile loss
-│   │   └── backtest.py         # Rolling-window validation
-│   ├── decision/
-│   │   ├── rules.py            # Play/Don't Play logic
-│   │   └── thresholds.json     # Decision thresholds
-│   ├── utils/
-│   │   └── io.py               # I/O helpers
-│   └── cli/
-│       ├── train.py            # Training CLI
-│       └── infer.py            # Inference CLI
-├── scripts/
-│   ├── make_sample_data.py     # Generate synthetic data
-│   └── run_all.sh              # End-to-end pipeline
-├── tests/
-│   ├── test_preprocess.py      # Feature engineering tests
-│   ├── test_metrics.py         # Metric calculation tests
-│   ├── test_decision.py        # Decision logic tests
-│   └── test_smoke_train.py     # Fast training smoke test
-├── deployment/
-│   └── hf_space/
-│       ├── app.py              # Gradio app
-│       └── requirements.txt    # HF Space dependencies
-├── experiments/
-│   └── latest/                 # Model artifacts (gitignored)
-├── notebooks/
-│   └── 00_quickstart_colab.ipynb
-├── docs/
-│   └── design.md               # Design decisions
-├── .github/
-│   └── workflows/
-│       └── ci.yml              # GitHub Actions CI
-├── requirements.txt
-├── pyproject.toml
-├── Makefile
-├── .gitignore
-└── LICENSE
-```
-
-## Using the Makefile
-
-```bash
-# Setup environment and install dependencies
-make setup
-
-# Generate sample data
-make data
-
-# Train models
-make train
-
-# Run all tests
-make test
-
-# Run inference
-make infer
-
-# Launch Gradio UI
-make ui
-```
-
-## Deployment to Hugging Face Spaces
-
-1. Create a new Space at https://huggingface.co/new-space
-2. Choose "Gradio" as the SDK
-3. Clone the Space repository:
-   ```bash
-   git clone https://huggingface.co/spaces/YOUR_USERNAME/YOUR_SPACE_NAME
-   ```
-4. Copy deployment files:
-   ```bash
-   cp deployment/hf_space/* YOUR_SPACE_NAME/
-   cp -r experiments/latest YOUR_SPACE_NAME/experiments/
-   cp -r src YOUR_SPACE_NAME/
-   ```
-5. Commit and push:
-   ```bash
-   cd YOUR_SPACE_NAME
-   git add .
-   git commit -m "Initial deployment"
-   git push
-   ```
-
-The Space will automatically build and deploy your Gradio app.
-
-## 🤖 Bot Integrations
-
-Make your forecaster available via messaging apps! Perfect for college groups.
-
-### Quick Setup - Telegram Bot (Recommended, 100% Free)
-
-```powershell
-# 1. Install dependencies
-pip install python-telegram-bot python-dotenv
-
-# 2. Create bot via @BotFather on Telegram and get token
-
-# 3. Set token
-$env:TELEGRAM_BOT_TOKEN = "your-token-here"
-
-# 4. Start bot
+# 6. Run the bot
 python -m src.integrations.telegram_bot
-
-# OR use the quick-start script
-.\scripts\start_telegram_bot.ps1
 ```
 
-Your friends can now message the bot:
-- `/start` - Get welcome message
-- `/forecast` - Get wind forecast & play decision
-- "Can I play?" - Any text gets instant forecast!
-
-### WhatsApp Bot Setup
-
-```powershell
-# 1. Sign up at https://www.twilio.com (free tier)
-# 2. Get WhatsApp sandbox credentials
-# 3. Set environment variables
-# 4. Start bot
-.\scripts\start_whatsapp_bot.ps1
-```
-
-### Detailed Setup Guide
-
-See **[docs/BOT_SETUP.md](docs/BOT_SETUP.md)** for:
-- Step-by-step Telegram/WhatsApp setup
-- Feature ideas for college groups
-- Deployment options (24/7 online)
-- Advanced features (notifications, polls, leaderboards)
-
-## Configuration
-
-Edit `src/config.py` to change:
-- **Forecast horizons**: `[1, 3, 6]` hours by default
-- **Random seed**: `42` for reproducibility
-- **Model hyperparameters**: LSTM units, layers, dropout
-- **Training parameters**: epochs, batch size, learning rate
-
-Edit `src/decision/thresholds.json` to adjust play/don't play criteria:
-- `median_max_m_s`: Maximum median wind speed (m/s)
-- `q90_max_m_s`: Maximum 90th percentile wind speed
-- `prob_over_3m_s_max`: Maximum probability of wind > 3 m/s
-
-## API Keys (Optional)
-
-If you have access to weather APIs (e.g., METAR, OpenWeather), set environment variables:
+### Option 3: Using Make Commands
 
 ```bash
-# PowerShell
-$env:WEATHER_API_KEY = "your_key_here"
+make setup      # Create virtual environment
+make data       # Generate sample data
+make train      # Train ML model
+make test       # Run tests
+make ui         # Launch Gradio UI
 ```
 
-The system will gracefully fall back to synthetic data if keys are missing.
+## 🤖 Telegram Bot Setup
 
-## Development
+**Bot Name:** `@predict_air_bot`  
+**Token:** `8673843397:AAHzVeeFGuOZVztMBpnUUjSzD6G5jYHdJuQ` ⚠️ *Keep secure!*
 
-### Code Style
+### First-Time Bot Setup
+
+1. **Get Telegram Token** (one-time):
+   - Open Telegram → Search `@BotFather`
+   - Send `/newbot` → Follow instructions
+   - Copy the token
+
+2. **Configure Token**:
+   ```bash
+   ./setup_bot.sh
+   # Paste your token when prompted
+   ```
+
+3. **Start Bot**:
+   ```bash
+   ./run_project.sh
+   # Or manually: python -m src.integrations.telegram_bot
+   ```
+
+### 🤖 Bot Features
+
+**Interactive Commands:**
+- `/start` - Welcome message with main menu
+- **🌤️ Quick Check** - Instant play/don't play decision
+- **🔄 Refresh** - Get fresh weather data
+- **🏠 Main Menu** - Return to main menu
+- **📍 Change Location** - Location settings (future feature)
+- **🔮 Full Forecast** - Detailed 6-hour wind forecast
+
+**Smart Features:**
+- ✅ **Consistent Results** - Weather caching prevents alternating predictions
+- ✅ **Real-time Updates** - Fresh data every 5 minutes
+- ✅ **Mobile Optimized** - Works perfectly on phones
+- ✅ **Error Handling** - Graceful fallbacks and user-friendly messages
+
+**How to Use:**
+1. Start a chat with `@predict_air_bot` on Telegram
+2. Send `/start` or click the buttons
+3. Get instant badminton playing recommendations!
+
+## 📁 Project Structure
+
+```
+badminton_play_prediction_bot/
+├── run_project.sh           # 🆕 One-command setup script
+├── start.sh                 # Railway deployment script
+├── setup_bot.sh            # Bot token configuration
+├── requirements.txt         # Python dependencies
+├── requirements-bots.txt   # Bot-specific dependencies
+├── .env                     # Environment variables (bot token)
+├── .env.example            # Environment template
+├── pyproject.toml          # Project configuration
+├── environment.yml         # Conda environment
+├── runtime.txt             # Python version for deployment
+├── Makefile                # Build automation
+├── README.md               # This file
+├── src/
+│   ├── config.py           # Central configuration
+│   ├── data/
+│   │   ├── fetch.py        # Data loading utilities
+│   │   └── preprocess.py   # Feature engineering
+│   ├── models/
+│   │   ├── baseline.py     # Persistence model
+│   │   ├── lstm_model.py   # LSTM forecaster
+│   │   └── quantiles.py    # Uncertainty quantification
+│   ├── eval/
+│   │   ├── metrics.py      # MAE, RMSE, quantile loss
+│   │   └── backtest.py     # Rolling-window validation
+│   ├── decision/
+│   │   ├── rules.py        # Play/Don't Play logic
+│   │   └── thresholds.json # Decision thresholds
+│   ├── integrations/
+│   │   └── telegram_bot.py # 🤖 Main Telegram bot
+│   ├── utils/
+│   │   └── io.py           # I/O helpers
+│   └── cli/
+│       ├── train.py        # Training CLI
+│       └── infer.py        # Inference CLI
+├── scripts/
+│   ├── make_sample_data.py # Generate synthetic weather data
+│   └── run_all.sh          # End-to-end pipeline
+├── data/
+│   ├── processed/          # Processed datasets
+│   └── raw/                # Raw data (gitignored)
+├── experiments/
+│   └── latest/             # Model artifacts (gitignored)
+├── tests/                  # Unit tests
+├── deployment/             # Deployment configurations
+│   ├── hf_space/          # Hugging Face Spaces
+│   ├── railway/           # Railway deployment
+│   └── render/            # Render deployment
+├── notebooks/             # Jupyter notebooks
+├── docs/                  # Documentation
+└── .github/               # GitHub Actions CI/CD
+```
+
+## 🚀 Deployment Options
+
+### Railway (Recommended - 100% Free)
+
+```bash
+# Automatic deployment
+git push to Railway remote
+# That's it! Railway handles everything
+```
+
+### Render
+
+```yaml
+# render.yaml
+services:
+  - type: web
+    name: badminton-bot
+    env: python
+    buildCommand: "pip install -r requirements.txt && python scripts/make_sample_data.py"
+    startCommand: "python -m src.integrations.telegram_bot"
+```
+
+### Fly.io
+
+```toml
+# fly.toml
+app = "badminton-bot"
+primary_region = "sin"
+
+[build]
+  image = "python:3.13-slim"
+
+[processes]
+  app = "python -m src.integrations.telegram_bot"
+```
+
+### Hugging Face Spaces
+
+```bash
+# Deploy Gradio UI
+cd deployment/hf_space
+# Upload to HF Spaces
+```
+
+## ⚙️ Configuration
+
+### Bot Settings (`src/config.py`)
+
+```python
+# Forecast horizons (hours)
+FORECAST_HORIZONS = [1, 3, 6]
+
+# Weather data cache duration
+CACHE_DURATION_MINUTES = 5
+
+# Default location
+DEFAULT_LOCATION = "IIIT Lucknow"
+
+# Random seed for consistency
+RANDOM_SEED = 42
+```
+
+### Decision Thresholds (`src/decision/thresholds.json`)
+
+```json
+{
+  "median_max_m_s": 3.33,
+  "q90_max_m_s": 5.0,
+  "prob_over_3m_s_max": 0.3
+}
+```
+
+### Environment Variables (`.env`)
+
+```bash
+# Required
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+
+# Optional
+WEATHER_API_KEY=your_openweather_api_key
+OPENAI_API_KEY=your_openai_key_for_enhanced_features
+```
+
+## 🧪 Testing & Development
+
+### Run Tests
+
+```bash
+# All tests
+pytest
+
+# Fast tests only
+pytest -m "not slow"
+
+# With coverage
+pytest --cov=src --cov-report=html
+```
+
+### Code Quality
 
 ```bash
 # Format code
@@ -270,82 +273,125 @@ black src tests scripts
 
 # Sort imports
 isort src tests scripts
+
+# Type checking
+mypy src
 ```
 
-### Running Specific Tests
+### Manual Testing
 
 ```bash
-# Run only fast tests
-pytest -m "not slow"
+# Test bot locally (without token)
+python -m src.integrations.telegram_bot
 
-# Run with coverage
-pytest --cov=src --cov-report=html
+# Test data generation
+python scripts/make_sample_data.py
+
+# Test model training
+python -m src.cli.train --model lstm --epochs 5
+
+# Test inference
+python -m src.cli.infer --model experiments/latest/model.keras
 ```
 
-## Model Performance
+## 📊 Model Performance
 
-### Current Status: ⚠️ Trained on Synthetic Data
+### Current Status: ⚠️ Demo Mode (Synthetic Data)
 
-The current deployed model is trained on **synthetic/sample data** for demonstration purposes:
-- **Baseline (Persistence)**: MAE ~0.3 m/s, RMSE ~0.45 m/s
-- **LSTM**: MAE ~0.25 m/s, RMSE ~0.38 m/s (after 50 epochs)
+- **Baseline Model**: MAE ~0.3 m/s, RMSE ~0.45 m/s
+- **LSTM Model**: MAE ~0.25 m/s, RMSE ~0.38 m/s (after 20 epochs)
+- **Data Source**: Synthetic weather data for demonstration
 
-### 🎯 Next Step: Train on Real Historical Data
+### 🎯 Production-Ready Training
 
-To achieve production-ready performance, the model needs to be trained on **real historical weather data** from IIIT Lucknow:
+**Option 1: Automatic Data Collection (Recommended)**
+- Bot automatically collects weather data during use
+- Saved to `data/collected/weather_observations.csv`
+- Retrain after 30+ days: `python scripts/check_data_collection.py --retrain`
 
-**Option 1: OpenWeatherMap Historical API (Paid)**
-- Requires paid subscription for historical data access
-- Can fetch years of hourly observations
-- Run: `python scripts/retrain_on_real_data.py` (requires historical API key)
+**Option 2: Historical Weather APIs**
+- OpenWeatherMap Historical API (paid)
+- METAR weather station data
+- Local weather station exports
 
-**Option 2: Local Weather Station Data**
-- Collect data from a local weather station
-- Export as CSV with columns: `datetime, wind_m_s, wind_gust_m_s, temp, humidity, pressure`
-- Place in `data/raw/` and retrain
-
-**Option 3: ✅ Automatic Data Collection (RECOMMENDED)**
-- **The bot automatically collects data** every time you use it!
-- Observations saved to `data/collected/weather_observations.csv`
-- After 30+ days, retrain with: `python scripts/check_data_collection.py --retrain`
-- Check progress anytime: `python scripts/check_data_collection.py`
-- **No manual work needed** - just use the bot normally!
-- See [DATA_COLLECTION.md](docs/DATA_COLLECTION.md) for details
-
-### Expected Real-World Performance
-Once trained on real IIIT Lucknow data:
-- **MAE**: 0.4-0.6 m/s (1.4-2.2 km/h) for 1h forecasts
-- **RMSE**: 0.6-0.8 m/s (2.2-2.9 km/h) for 1h forecasts
+**Expected Real-World Performance:**
+- **MAE**: 0.4-0.6 m/s for 1h forecasts
+- **RMSE**: 0.6-0.8 m/s for 1h forecasts
 - Performance degrades for longer horizons (3h, 6h)
 
-> **Note**: The bot currently works with live OpenWeatherMap forecasts for decision-making. The LSTM model provides additional context but isn't strictly required for the NOW mode, which uses current weather conditions directly.
+## 🔧 Troubleshooting
 
-## Citation
+### Bot Won't Start
 
-If you use this project, please cite:
+```bash
+# Check if another instance is running
+pkill -f telegram_bot
+
+# Verify token
+cat .env
+
+# Test without token (demo mode)
+python -m src.integrations.telegram_bot
+```
+
+### Dependencies Issues
+
+```bash
+# Clean reinstall
+rm -rf venv
+./run_project.sh
+```
+
+### Model Training Fails
+
+```bash
+# Bot works without ML model
+# Check data exists
+ls data/processed/
+
+# Regenerate data
+python scripts/make_sample_data.py
+```
+
+### Inconsistent Predictions
+
+- ✅ **Fixed**: Weather data caching ensures consistent results
+- Cache duration: 5 minutes
+- Same data returns same prediction
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature-name`
+3. Add tests for new functionality
+4. Ensure `pytest` passes
+5. Submit pull request
+
+## 📄 License
+
+MIT License - see LICENSE file for details.
+
+## 🙏 Citation
 
 ```bibtex
 @software{badminton_wind_predictor,
   title={Badminton Wind Predictor},
-  author={Your Name},
-  year={2025},
-  url={https://github.com/yourusername/badminton-wind-predictor}
+  author={Nithin Eleti},
+  year={2026},
+  url={https://github.com/nithineleti/badminton_play_prediction_bot}
 }
 ```
 
-## License
+## 📞 Support
 
-MIT License - see LICENSE file for details.
+- **Issues**: Open a GitHub issue
+- **Discussions**: Use GitHub Discussions
+- **Telegram**: Message `@predict_air_bot` for testing
 
-## Contributing
+---
 
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure `pytest` passes
-5. Submit a pull request
+**Ready to predict some badminton weather?** 🏸✨
 
-## Support
-
-For issues or questions, please open a GitHub issue.
+```bash
+./run_project.sh
+```
