@@ -9,10 +9,7 @@
   "functions": {
     "api/index.py": {
       "runtime": "python3.9",
-      "includeFiles": [
-        "api/**",
-        "src/**"
-      ],
+      "includeFiles": "api/** src/**",
       "excludeFiles": "experiments/** data/** **/*.keras **/*.pkl **/*.h5 **/*.pb **/*.onnx"
     }
   },
