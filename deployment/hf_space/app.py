@@ -9,8 +9,9 @@ import sys
 # Add src to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 
-from src.config import DEFAULT_LOCATION, RANDOM_SEED
-from src.integrations.telegram_bot import get_cached_weather
+from src.integrations.telegram_bot import (
+    get_cached_weather, DEFAULT_LOCATION, RANDOM_SEED
+)
 
 # Set random seed for consistency
 random.seed(RANDOM_SEED)
