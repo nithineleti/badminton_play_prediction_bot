@@ -9,16 +9,12 @@ This guide covers multiple ways to deploy your Badminton Wind Predictor Bot to p
 | **Railway** | ⭐⭐⭐ | $5 credit | ✅ | 5 minutes | Long-running bots |
 | **Render** | ⭐⭐⭐⭐ | 750 hours | ✅ | 10 minutes | Web apps & APIs |
 | **Fly.io** | ⭐⭐⭐⭐⭐ | Generous | ✅ | 15 minutes | Advanced scaling |
-| **Vercel** | ⭐⭐⭐⭐ | 100GB bandwidth | ⚠️ Serverless | 10 minutes | Webhooks & APIs |
 | **Hugging Face** | ⭐⭐⭐ | Unlimited | ❌ | 10 minutes | Web demos |
 
 ## 🎯 Recommended Options
 
 ### 🏆 Railway (Easiest for Bots)
 Railway offers the best balance of ease and reliability for long-running bots.
-
-### ⚡ Vercel (Great for Webhooks)
-Vercel is perfect for serverless webhook handling and API endpoints.
 
 ### 🌐 Hugging Face (Best for Web UI)
 Hugging Face Spaces is ideal for web-based demos and interfaces.
@@ -37,11 +33,6 @@ See `deployment/railway/README.md` for detailed instructions.
 - Free tier: 750 hours/month
 - Good for web apps
 - See `deployment/render/README.md`
-
-### Vercel
-- Perfect for webhook-based bots
-- Serverless deployment
-- See `deployment/vercel/README.md`
 
 ### Fly.io
 - Most powerful free tier

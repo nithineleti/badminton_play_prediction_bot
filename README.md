@@ -177,27 +177,6 @@ git push to Railway remote
 # That's it! Railway handles everything
 ```
 
-### Vercel (Webhook-Based)
-
-```json
-// vercel.json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "api/index.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "api/index.py"
-    }
-  ]
-}
-```
-
 ### Render
 
 ```yaml
