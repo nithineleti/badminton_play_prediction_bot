@@ -6,8 +6,10 @@ from telegram.ext import Application, CommandHandler, CallbackQueryHandler, Mess
 import asyncio
 import logging
 
-# Add src to path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+# Add src to path for imports
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 from src.integrations.telegram_bot import (
     start, predict, button_handler, full_forecast,
