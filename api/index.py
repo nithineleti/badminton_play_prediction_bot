@@ -9,10 +9,10 @@ import logging
 # Add src to path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from src.config import DEFAULT_LOCATION, RANDOM_SEED
 from src.integrations.telegram_bot import (
     start, predict, button_handler, full_forecast,
-    change_location, main_menu, get_cached_weather
+    change_location, main_menu, get_cached_weather,
+    DEFAULT_LOCATION, RANDOM_SEED
 )
 
 # Configure logging
