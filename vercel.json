@@ -13,15 +13,7 @@
         "api/**",
         "src/**"
       ],
-      "excludeFiles": [
-        "experiments/**",
-        "data/**",
-        "**/*.keras",
-        "**/*.pkl",
-        "**/*.h5",
-        "**/*.pb",
-        "**/*.onnx"
-      ]
+      "excludeFiles": "experiments/** data/** **/*.keras **/*.pkl **/*.h5 **/*.pb **/*.onnx"
     }
   },
   "env": {
