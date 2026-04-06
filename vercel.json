@@ -6,12 +6,6 @@
       "dest": "api/index.py"
     }
   ],
-  "functions": {
-    "api/index.py": {
-      "includeFiles": "api/** src/**",
-      "excludeFiles": "experiments/** data/** **/*.keras **/*.pkl **/*.h5 **/*.pb **/*.onnx"
-    }
-  },
   "env": {
     "PYTHONPATH": "."
   }
