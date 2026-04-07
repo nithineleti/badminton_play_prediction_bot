@@ -7,6 +7,7 @@ This guide covers multiple ways to deploy your Badminton Wind Predictor Bot to p
 | Platform | Difficulty | Free Tier | 24/7 Uptime | Setup Time | Best For |
 |----------|------------|-----------|-------------|------------|----------|
 | **Railway** | ⭐⭐⭐ | $5 credit | ✅ | 5 minutes | Long-running bots |
+| **AWS** | ⭐⭐⭐⭐⭐ | 750 hours EC2 | ✅ | 15 minutes | Enterprise & scaling |
 | **Render** | ⭐⭐⭐⭐ | 750 hours | ✅ | 10 minutes | Web apps & APIs |
 | **Fly.io** | ⭐⭐⭐⭐⭐ | Generous | ✅ | 15 minutes | Advanced scaling |
 | **Hugging Face** | ⭐⭐⭐ | Unlimited | ❌ | 10 minutes | Web demos |
@@ -33,6 +34,11 @@ See `deployment/railway/README.md` for detailed instructions.
 - Free tier: 750 hours/month
 - Good for web apps
 - See `deployment/render/README.md`
+
+### AWS Elastic Beanstalk
+- Enterprise-grade infrastructure
+- 750 hours EC2 free tier
+- See `deployment/aws/README.md`
 
 ### Fly.io
 - Most powerful free tier
