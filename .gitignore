@@ -155,3 +155,8 @@ logs/
 *.db
 *.sqlite
 telegram_bot_data/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

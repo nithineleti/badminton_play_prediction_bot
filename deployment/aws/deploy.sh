@@ -108,7 +108,7 @@ echo "==============================================="
 if [ ! -d ".elasticbeanstalk" ]; then
     echo -e "${YELLOW}📝 Initializing Elastic Beanstalk application...${NC}"
     eb init "$APP_NAME" \
-        --platform "Python 3.10 running on 64bit Amazon Linux 2" \
+        --platform "64bit Amazon Linux 2023 v4.12.0 running Python 3.9" \
         --region "$AWS_REGION" \
         --tags "Project=BadmintonBot,Environment=Production"
 
